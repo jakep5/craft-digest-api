@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS craft-digest_beers;
