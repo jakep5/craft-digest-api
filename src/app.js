@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const beersRouter = require('./beers/beers-router')
 const {CLIENT_ORIGIN} = require('./config');
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
@@ -19,6 +20,8 @@ app.use(
         origin: CLIENT_ORIGIN
     })
 );
+
+app.use('/beers', beersRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, boilerplate!')
