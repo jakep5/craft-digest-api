@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS craft-digest_beers;
+DROP TABLE IF EXISTS "craft-digest_beers";
