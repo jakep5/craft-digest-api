@@ -16,7 +16,6 @@ const BeersService = {
     },
 
     getUserBeers(db, userId) {
-        console.log(userId)
         return BeersService.getAllBeers(db)
         .where('user_id', userId)
     },
