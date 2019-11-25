@@ -14,6 +14,41 @@ usersRouter
                 return res.status(400).json({
                     error: `Request body does not include ${field}`
                 })
+
+        const passwordError = UsersService.validatePassword(password)
+
+        if(passwordError) {
+            return res.status(400).json({ error: passwordError })
+        }
+
+        UsersService.getUserWithUserName(
+            req.app.get('db'),
+            user_name
+        )
+            .then(getUserWithUserName => {
+                if (getUserWithUserName)
+                    return res.status(400).json({ error: `Username already taken` })
+
+                return UsersService.generateHashPassword(password)
+                    .then(hashedPassword => {
+                        const newUser = {
+                            user_name,
+                            password: hashedPassword,
+                            date_created: 'now()',
+                        }
+
+                        return UsersService.putUserInDb(
+                            req.app.get('db'),
+                            newUser
+                        )
+                            .then(user => {
+                                res
+                                    .status(201)
+                                    .location(path.posix.join(req.originalUrl, `/${userl.id}`))
+                                    .json(UsersService.serializeUser(user))
+                            })
+                    })
+            })
             
     })
 

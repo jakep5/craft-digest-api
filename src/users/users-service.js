@@ -4,7 +4,21 @@ const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*
 
 
 const UsersService = {
+    getUserWithUserName() {
 
+    },
+
+    generateHashPassword() {
+
+    },
+
+    putUserInDb() {
+
+    },
+
+    serializeUser() {
+        
+    }
 }
 
 module.exports = UsersService
