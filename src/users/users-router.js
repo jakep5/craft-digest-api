@@ -12,10 +12,11 @@ usersRouter
         for (const field of ['user_name', 'password'])
             if(!req.body[field])
                 return res.status(400).json({
-                    error: `Request body does not include ${field}`
+                    error: `${field} is required`
                 })
 
-        const passwordError = UsersService.validatePassword(password)
+        let passwordError = UsersService.validatePassword(password)
+
 
         if(passwordError) {
             return res.status(400).json({ error: passwordError })
@@ -44,7 +45,7 @@ usersRouter
                             .then(user => {
                                 res
                                     .status(201)
-                                    .location(path.posix.join(req.originalUrl, `/${userl.id}`))
+                                    .location(path.posix.join(req.originalUrl, `/${user.id}`))
                                     .json(UsersService.serializeUser(user))
                             })
                     })
