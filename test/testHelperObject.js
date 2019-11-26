@@ -133,6 +133,20 @@ const testHelperObject = {
             algorithm: 'HS256'
         })
         return `Bearer ${token}`
+    },
+
+    makeExpectedBeer(users, beer) {
+
+        return {
+            id: beer.id,
+            name: beer.name,
+            brewery_name: beer.brewery_name,
+            brewery_location: beer.brewery_location,
+            tasting_notes: beer.tasting_notes,
+            abv: beer.abv,
+            rating: beer.rating,
+            user_id: users[1].id
+        }
     }
 }
 

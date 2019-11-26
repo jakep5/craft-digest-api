@@ -44,8 +44,9 @@ describe('Beers endpoints', function() {
         ]
 
         protectedEndpoints.forEach(endpoint => {
-            describe.only(endpoint.name, () => {
-                it(`responds with 401 when no bearer token/incorrect authorization`, () => {
+            describe(endpoint.name, () => {
+
+            it(`responds with 401 when no bearer token/incorrect authorization`, () => {
                     return supertest(app)
                         .get(endpoint.path)
                         .expect(401, { error: `Unauthorized request` })
@@ -59,6 +60,40 @@ describe('Beers endpoints', function() {
                     .get(endpoint.path)
                     .set('Authorization', testHelperObject.makeAuthenticationHeader(validUser, invalidSecret))
                     .expect(401, { error: `Unauthorized request` })
+            })
+
+            it(`responds 401 'Unauthorized request' when invalid sub in payload`, () => {
+                const invalidUser = { user_name: 'invalid-user-name', id: 1 }
+                return supertest(app)
+                    .get(endpoint.path)
+                    .set('Authorization', makeAuthenticationHeader(invalidUser))
+                    .expect(401, { error: `Unauthorized request` })
+            })
+        })
+    })
+
+    describe.only(`GET /beers/user_id`, () => {
+        context(`Given there are articles in the database`, () => {
+
+            beforeEach('insert test beers', () => {
+                testHelperObject.seedTestBeers(
+                    db,
+                    testUsers,
+                    testBeers
+                )
+            })
+
+            it('Responds with corresponding articles when valid username and password are supplied', () => {
+                const expectedBeerId = 6;
+                const expectedBeer = testHelperObject.makeExpectedBeer(
+                    testUsers,
+                    testBeers
+                )
+
+                return supertest(app)
+                    .get(`/beers/${expectedBeerId}`)
+                    .set('Authorization', makeAuthenticationHeader(testUsers[1]))
+                    .expect(200, expectedBeer)
             })
         })
     })
