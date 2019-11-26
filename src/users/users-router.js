@@ -27,7 +27,7 @@ usersRouter
         )
             .then(getUserWithUserName => {
                 if (getUserWithUserName)
-                    return res.status(400).json({ error: `Username already taken` })
+                    return res.status(400).json({ error: `Username has already been taken, please choose another` })
 
                 return UsersService.generateHashPassword(password)
                     .then(hashedPassword => {
@@ -49,7 +49,7 @@ usersRouter
                             })
                     })
             })
-            
+            .catch(next)
     })
 
 module.exports = usersRouter
