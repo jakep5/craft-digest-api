@@ -6,7 +6,7 @@ function requireAuthentication (req, res, next) {
     let bearerToken
 
     if (!authToken.toLowerCase().startsWith('bearer ')) {
-        return res.status(401).json({ error: 'Unauthorized requeest' })
+        return res.status(401).json({ error: 'Unauthorized request' })
     } else {
         bearerToken = authToken.slice(7, authToken.length)
     }

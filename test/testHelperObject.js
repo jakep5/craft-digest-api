@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs')
+
 const testHelperObject = {
     makeBeersArray() {
         return [
@@ -86,22 +88,52 @@ const testHelperObject = {
         return db.transaction(trx =>
             trx.raw(
                 `TRUNCATE
-                craft-digest_beers,
-                craft-digest_users
+                "craft-digest_beers",
+                "craft-digest_users"
                 `
             )
             .then(() =>
                 Promise.all([
-                    trx.raw(`ALTER SEQUENCE craft-digest_beers_id_seq minvalue 0 START WITH 1`),
-                    trx.raw(`ALTER SEQUENCE craft-digest_users_id_seq minvalue 0 START WITH 1`),
-                    trx.raw(`SELECT setval('craft-digest_beers_id_seq', 0)`),
-                    trx.raw(`SELECT setval('craft-digest_users_id_seq', 0)`),
+                    trx.raw(`ALTER SEQUENCE "craft-digest_beers_id_seq" minvalue 0 START WITH 1`),
+                    trx.raw(`ALTER SEQUENCE "craft-digest_users_id_seq" minvalue 0 START WITH 1`),
+                    trx.raw(`SELECT setval('"craft-digest_beers_id_seq"', 0)`),
+                    trx.raw(`SELECT setval('"craft-digest_users_id_seq"', 0)`),
                 ]))    
-        )
+            )
 
+    },
+
+    seedTestUsers(db, users) {
+        const usersWithHash = users.map(user => ({
+            ...user,
+            password: bcrypt.hashSync(user.password, 1)
+        }))
+        return db.into('craft-digest_users').insert(usersWithHash)
+            .then(() => 
+                db.raw(
+                    `SELECT setval('craft-digest_users_id_seq', ?)`,
+                    [users[users.length -1].id],
+                ))
+    },
+
+    seedTestBeers(db, users, beers) {
+        return db.transaction(async trx => {
+            await this.seedTestUsers(trx, users)
+            await trx.into('craft-digest_beers').insert(beers)
+            await trx.raw(
+                `SELECT setval('craft-digest_beers_id_seq', ?)`,
+                [beers[beers.length - 1].id],
+            )
+        })
+    },
+
+    makeAuthenticationHeader(user, secret=process.env.JWT_SECRET) {
+        const token = jwt.sign({ user_id: user.id }, secret, {
+            subject: user.user_name,
+            algorithm: 'HS256'
+        })
+        return `Bearer ${token}`
     }
-
-
 }
 
 module.exports = testHelperObject
