@@ -1,7 +1,10 @@
 const express = require('express')
 const BeersService = require('./beers-service')
 const { requireAuthentication } = require('../middleware/jwtAuthentication')
+
 const beersRouter = express.Router()
+
+const jsonBodyParser = express.json()
 
 beersRouter
     .route('/:user_id')
@@ -17,5 +20,10 @@ beersRouter
         })
         .catch(next)
 })
+
+beersRouter
+    .route('/')
+    .all(requireAuthentication)
+    .post(json)
 
 module.exports = beersRouter

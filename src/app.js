@@ -5,6 +5,8 @@ const cors = require('cors')
 const beersRouter = require('./beers/beers-router')
 const {CLIENT_ORIGIN} = require('./config');
 const helmet = require('helmet')
+const authRouter = require('./auth/auth-router')
+const usersRouter = require('./users/users-router')
 const { NODE_ENV } = require('./config')
 
 const app = express()
@@ -22,6 +24,8 @@ app.use(
 );
 
 app.use('/beers', beersRouter)
+app.use('/auth', authRouter)
+app.use('/users', usersRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, boilerplate!')

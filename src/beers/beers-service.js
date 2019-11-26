@@ -30,6 +30,16 @@ const BeersService = {
             abv: beer.abv,
             rating: beer.rating
         }
+    },
+
+    insertBeerIntoDb(knex, newlyAddedBeer) {
+        return knex
+            .insert(newlyAddedBeer)
+            .into('craft-digest')
+            .returning('*')
+            .then(rows => {
+                return rows[0]
+            })
     }
 }
 
