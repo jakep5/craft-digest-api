@@ -80,6 +80,25 @@ const testHelperObject = {
                 date_created: new Date('2029-01-22T16:28:32.615Z')
             }
         ]
+    },
+
+    cleanTables(db) {
+        return db.transaction(trx =>
+            trx.raw(
+                `TRUNCATE
+                craft-digest_beers,
+                craft-digest_users
+                `
+            )
+            .then(() =>
+                Promise.all([
+                    trx.raw(`ALTER SEQUENCE craft-digest_beers_id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`ALTER SEQUENCE craft-digest_users_id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`SELECT setval('craft-digest_beers_id_seq', 0)`),
+                    trx.raw(`SELECT setval('craft-digest_users_id_seq', 0)`),
+                ]))    
+        )
+
     }
 
 
