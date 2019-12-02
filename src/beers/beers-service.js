@@ -35,7 +35,7 @@ const BeersService = {
     insertBeerIntoDb(knex, newlyAddedBeer) {
         return knex
             .insert(newlyAddedBeer)
-            .into('craft-digest')
+            .into('craft-digest_beers')
             .returning('*')
             .then(rows => {
                 return rows[0]

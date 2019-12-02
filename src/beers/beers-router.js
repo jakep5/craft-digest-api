@@ -1,6 +1,7 @@
 const express = require('express')
 const BeersService = require('./beers-service')
 const { requireAuthentication } = require('../middleware/jwtAuthentication')
+const path = require('path')
 
 const beersRouter = express.Router()
 
@@ -25,8 +26,8 @@ beersRouter
     .route('/')
     .all(requireAuthentication)
     .post(requireAuthentication, jsonBodyParser, (req, res, next) => {
-        const { id, name, brewery_name, brewery_location, abv, rating, user_id } = req.body
-        const newlyAddedBeer = { id, name, brewery_name, brewery_location, abv, rating, user_id }
+        const { name, brewery_name, brewery_location, abv, rating, user_id } = req.body
+        const newlyAddedBeer = { name, brewery_name, brewery_location, abv, rating, user_id }
 
         for (const [key, value] of Object.entries(newlyAddedBeer)) {
             if (value == null) {
@@ -43,8 +44,8 @@ beersRouter
             .then(beer => {
                 res
                     .status(201)
-                    .location(path.posix.join(req.originalUrl + `/${note.id}`))
-                    .json(serializeBeer(beer))
+                    .location(path.posix.join(req.originalUrl + `/${beer.id}`))
+                    .json(BeersService.serializeBeer(beer))
             })
             .catch(next)
     })

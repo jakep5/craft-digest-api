@@ -3,6 +3,7 @@ const AuthService = require('../auth/auth-service')
 function requireAuthentication (req, res, next) {
     const authToken = req.get('Authorization') || ''
 
+
     let bearerToken
 
     if (!authToken.toLowerCase().startsWith('bearer ')) {
@@ -13,6 +14,7 @@ function requireAuthentication (req, res, next) {
 
     try {
         const payload = AuthService.verifyJWT(bearerToken)
+        
 
         AuthService.getUserWithUserName(
             req.app.get('db'),
@@ -30,6 +32,7 @@ function requireAuthentication (req, res, next) {
                 next(error)
             })
     } catch (error) {
+        console.log(error)
         res.status(401).json({ error: 'Unauthorized request' })
     }
 }
