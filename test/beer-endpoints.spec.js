@@ -72,7 +72,7 @@ describe('Beers endpoints', function() {
         })
     })
 
-    describe.only(`GET /beers/user_id`, () => {
+    describe(`GET /beers/user_id`, () => {
         context(`Given there are articles in the database`, () => {
 
             beforeEach('insert test beers', () => {
@@ -87,14 +87,42 @@ describe('Beers endpoints', function() {
                 const expectedBeerId = 6;
                 const expectedBeer = testHelperObject.makeExpectedBeer(
                     testUsers,
-                    testBeers
+                    testBeers[5]
                 )
 
                 return supertest(app)
-                    .get(`/beers/${expectedBeerId}`)
-                    .set('Authorization', makeAuthenticationHeader(testUsers[1]))
+                    .get(`/beers/${testUsers[1].id}`)
+                    .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[1]))
                     .expect(200, expectedBeer)
             })
+        })
+    })
+
+    describe.only(`POST /beers/`, () => {
+        const testBeers = testHelperObject.makeBeersArray()
+        beforeEach('insert test beers', () => {
+            testHelperObject.seedTestBeers(
+                db, 
+                testUsers,
+                testBeers
+            )
+        })
+
+        it('creates a beer entry, responding with 201', function() {
+            const newBeer = {
+                name: 'Spotted Cow',
+                brewery_name: 'New Glarus Brewing',
+                brewery_location: 'New Glarus, WI',
+                tasting_notes: 'Dry, wheat',
+                abv: 5,
+                rating: 4,
+                user_id: 2,
+            }
+            return supertest(app)
+                .post('/beers/')
+                .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[1]))
+                .send(newBeer)
+                .expect(201)
         })
     })
 })

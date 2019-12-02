@@ -35,7 +35,7 @@ const BeersService = {
             brewery_location: xss(beer.brewery_location),
             tasting_notes: xss(beer.tasting_notes),
             abv: parseFloat(beer.abv),
-            rating: beer.rating
+            rating: parseFloat(beer.rating)
         }
     },
 

@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const testHelperObject = {
     makeBeersArray() {
@@ -90,7 +91,7 @@ const testHelperObject = {
                 `TRUNCATE
                 "craft-digest_beers",
                 "craft-digest_users"
-                `
+                RESTART IDENTITY CASCADE`
             )
             .then(() =>
                 Promise.all([
@@ -137,16 +138,17 @@ const testHelperObject = {
 
     makeExpectedBeer(users, beer) {
 
-        return {
-            id: beer.id,
-            name: beer.name,
-            brewery_name: beer.brewery_name,
-            brewery_location: beer.brewery_location,
-            tasting_notes: beer.tasting_notes,
-            abv: beer.abv,
-            rating: beer.rating,
-            user_id: users[1].id
-        }
+        return [
+            {
+                id: beer.id,
+                name: beer.name,
+                brewery_name: beer.brewery_name,
+                brewery_location: beer.brewery_location,
+                tasting_notes: beer.tasting_notes,
+                abv: beer.abv,
+                rating: beer.rating,
+            }
+        ]
     }
 }
 
