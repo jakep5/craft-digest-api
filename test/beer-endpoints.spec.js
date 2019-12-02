@@ -72,7 +72,7 @@ describe('Beers endpoints', function() {
         })
     })
 
-    describe.only(`GET /beers/user_id`, () => {
+    describe(`GET /beers/user_id`, () => {
         context(`Given there are articles in the database`, () => {
 
             beforeEach('insert test beers', () => {
