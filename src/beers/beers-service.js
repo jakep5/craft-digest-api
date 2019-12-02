@@ -20,6 +20,13 @@ const BeersService = {
         .where('user_id', userId)
     },
 
+    deleteBeer(db, id) {
+        return db
+            .from('craft-digest_beers')
+            .where({id})
+            .delete()
+    },
+
     serializeBeer(beer) {
         return {
             id: beer.id,
@@ -27,7 +34,7 @@ const BeersService = {
             brewery_name: xss(beer.brewery_name),
             brewery_location: xss(beer.brewery_location),
             tasting_notes: xss(beer.tasting_notes),
-            abv: beer.abv,
+            abv: parseFloat(beer.abv),
             rating: beer.rating
         }
     },

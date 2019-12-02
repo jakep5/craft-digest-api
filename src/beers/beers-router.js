@@ -16,7 +16,6 @@ beersRouter
             req.params.user_id
         )
         .then(beers => {
-            console.log(beers)
             res.json(beers.map(BeersService.serializeBeer))
         })
         .catch(next)
@@ -26,8 +25,8 @@ beersRouter
     .route('/')
     .all(requireAuthentication)
     .post(requireAuthentication, jsonBodyParser, (req, res, next) => {
-        const { name, brewery_name, brewery_location, abv, rating, user_id } = req.body
-        const newlyAddedBeer = { name, brewery_name, brewery_location, abv, rating, user_id }
+        const { name, brewery_name, brewery_location, tasting_notes, abv, rating, user_id } = req.body
+        const newlyAddedBeer = { name, brewery_name, brewery_location, tasting_notes, abv, rating, user_id }
 
         for (const [key, value] of Object.entries(newlyAddedBeer)) {
             if (value == null) {
@@ -48,6 +47,18 @@ beersRouter
                     .json(BeersService.serializeBeer(beer))
             })
             .catch(next)
+    })
+
+beersRouter
+    .route('/:beerId')
+    .all(requireAuthentication)
+    .delete((req, res, next) => {
+        BeersService.deleteBeer(
+            req.app.get('db'),
+            req.params.beerId
+        )
+            .then(res.status(204))
+            return null;
     })
 
 module.exports = beersRouter
