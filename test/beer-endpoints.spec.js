@@ -72,7 +72,7 @@ describe('Beers endpoints', function() {
         })
     })
 
-    describe(`GET /beers/user_id`, () => {
+    describe.only(`GET /beers/user_id`, () => {
         context(`Given there are articles in the database`, () => {
 
             beforeEach('insert test beers', () => {
@@ -96,9 +96,24 @@ describe('Beers endpoints', function() {
                     .expect(200, expectedBeer)
             })
         })
+
+        context(`Given no beers in the database corresponding to user`, () => {
+            beforeEach(() =>
+                testHelperObject.seedTestUsers(db, testUsers)
+            )
+            it(`responds with no beers`, () => {
+                const userId = testUsers[1].id
+                return supertest(app)
+                    .get(`/beers/${userId}`)
+                    .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[1]))
+                    .expect(res => {
+                        expect(res.body == undefined)
+                    })
+            })
+        })
     })
 
-    describe.only(`POST /beers/`, () => {
+    describe(`POST /beers/`, () => {
         const testBeers = testHelperObject.makeBeersArray()
         beforeEach('insert test beers', () => {
             testHelperObject.seedTestBeers(
