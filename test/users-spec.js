@@ -22,7 +22,7 @@ describe('Users endpoints', function() {
 
     afterEach('cleanup', () => testHelperObject.cleanTables(db))
 
-    describe.only(`GET /beers/:userId`, () => {
+    describe(`GET /beers/:userId`, () => {
         context('Happy path', () => {
             it('responds with 201, storing bcrypted password on user creation', () => {
                 const newUser = {
