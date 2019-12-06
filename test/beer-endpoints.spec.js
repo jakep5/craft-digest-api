@@ -115,6 +115,7 @@ describe('Beers endpoints', function() {
 
     describe(`POST /beers/`, () => {
         const testBeers = testHelperObject.makeBeersArray()
+        const testUsers = testHelperObject.makeUsersArray()
         beforeEach('insert test beers', () => {
             testHelperObject.seedTestBeers(
                 db, 
