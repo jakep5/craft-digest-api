@@ -10,6 +10,9 @@ const jsonBodyParser = express.json()
 beersRouter
     .route('/:user_id')
     .all(requireAuthentication)
+        .catch(err => {
+            console.log('Token expired, please sign in again')
+        })
     .get((req, res, next) => {
         BeersService.getUserBeers(
             req.app.get('db'),
@@ -18,7 +21,9 @@ beersRouter
         .then(beers => {
             res.json(beers.map(BeersService.serializeBeer))
         })
-        .catch(next)
+        .catch(err => {
+            console.log('You must log in to see this page')
+        })
 })
 
 beersRouter
