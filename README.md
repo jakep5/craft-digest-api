@@ -48,9 +48,10 @@ Example POST user format:
 {
   "user_name": "testuser",
   "password": "Password123!",
-  "date_created": "now()" <-- utilizes javascript's now() method to generate the current time
+  "date_created": "now()" *
 }
 ```
+* date_created utilizes javascript's 'now()' method to get the current time
 
 ## POST - User login
 
