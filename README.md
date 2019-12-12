@@ -4,7 +4,7 @@ API implemented for use with Craft Digest application
 
 ## Authentication
 
-Authentication done using JWT authentication. Users log in with their username and password, and their beers are associated with their user ID.
+Authentication done using JWT authentication. Users log in with their username and password, and are assigned a user_id upon user creation. Added beers by the user are then associated with their user_id.
 
 ## Base URL
 
