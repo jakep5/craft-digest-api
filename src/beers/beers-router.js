@@ -16,8 +16,7 @@ beersRouter
             req.params.user_id
         )
         .then(beers => {
-            console.log(beers)
-            /* res.json(beers.map(BeersService.serializeBeer)) */
+            res.json(beers.map(BeersService.serializeBeer))
         })
         .catch(next)
 })
